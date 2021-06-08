@@ -11,7 +11,7 @@ type GithubEvent struct {
 		Number int
 	}
 	Repository struct {
-		FullName string
+		FullName string `json:"full_name"`
 	}
 }
 
@@ -25,7 +25,7 @@ func main() {
 	if err := json.Unmarshal(bs, &event); err != nil {
 		log.Fatalf("failed to unmarshal event: %v", err)
 	}
-	log.Println(event)
+	log.Printf("%#v", event)
 	// ctx := context.Background()
 	// ts := oauth2.StaticTokenSource{
 	// 	&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},
