@@ -54,6 +54,7 @@ func main() {
 	}
 
 	for suite := range toRerun {
+		log.Printf("retriggering %v", suite)
 		if _, err := client.Checks.ReRequestCheckSuite(ctx, owner, repo, suite); err != nil {
 			log.Fatalf("failed to rerun suite: %v", err)
 		}
