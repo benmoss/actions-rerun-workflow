@@ -1,9 +1,8 @@
 FROM golang:latest
 
-WORKDIR /go/src/app
+WORKDIR /src
 COPY . .
 
-RUN go get -d -v ./...
-RUN go install -v ./...
+RUN go build -o /bin/action
 
-ENTRYPOINT go run main.go
+ENTRYPOINT ["/bin/action"]
