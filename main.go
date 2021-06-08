@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -13,6 +12,9 @@ import (
 )
 
 type GithubEvent struct {
+	Comment struct {
+		Body string
+	}
 	Issue struct {
 		Number int
 	}
@@ -30,6 +32,10 @@ func main() {
 	if err := json.Unmarshal(bs, &event); err != nil {
 		log.Fatalf("failed to unmarshal event: %v", err)
 	}
+	if event.Comment.Body != os.Getenv("INPUT_RERUN_CMD") {
+		log.Println("Not a rerun comment, skipping")
+		return
+	}
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")})
 	tc := oauth2.NewClient(ctx, ts)
@@ -41,7 +47,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to get pull requests: %v", err)
 	}
-	fmt.Println(pr.Head.Ref)
 	runs, _, err := client.Checks.ListCheckRunsForRef(ctx, owner, repo, *pr.Head.Ref, nil)
 	if err != nil {
 		log.Fatalf("failed to get check runs: %v", err)

@@ -2,19 +2,10 @@ name: 'Operate Actions CI'
 description: 'Operate Actions CI'
 author: 'benmoss'
 inputs:
-  repo_owner:
-    description: 'The owner of the repository'
-    required: true
-  repo_name:
-    description: 'The name of the repository'
-    required: true
   rerun_cmd:
     description: 'The commands string to rerun all failure checks'
     required: false
     default: '/retest'
-  comments:
-    description: 'The comments string of the PR.'
-    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
